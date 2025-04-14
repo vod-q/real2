@@ -471,67 +471,28 @@ local function makeUI()
 	end)
 
 	local function BESTLOADINGANIMATIONNOTFAKE()
+		-- Hide key system UI elements
 		TextBox.Visible = false
 		StatusLabel.Visible = false
 		ButtonsFrame.Visible = false
 	
+		-- Show loading animation
 		LoadingBarContainer.Visible = true
 		LoadingText.Visible = true
-	
 		LoadingText.Text = "Validating key..."
 	
-		local startTime = tick()
-		local duration = 1.5
-		local connection
-	
-		connection = game:GetService("RunService").RenderStepped:Connect(function()
-			local elapsed = tick() - startTime
-			local progress = math.min(elapsed / duration, 1)
-	
-			local easedProgress = 1 - (1 - progress) ^ 3
-	
-			LoadingBarFill.Size = UDim2.new(easedProgress, 0, 1, 0)
-	
-			if progress < 0.3 then
-				LoadingText.Text = "Checking key..."
-			elseif progress < 0.6 then
-				LoadingText.Text = "Authenticating..."
-			elseif progress < 0.9 then
-				LoadingText.Text = "Almost there..."
-			else
-				LoadingText.Text = "Authenticated."
+		-- Simulate a short loading process
+		task.delay(1.5, function()
+			-- Destroy the key system UI
+			if scringui and scringui.Parent then
+				scringui:Destroy()
+			end
+			if blurEffect and blurEffect.Parent then
+				blurEffect:Destroy()
 			end
 	
-			if progress >= 1 then
-				connection:Disconnect()
-	
-				game:GetService("TweenService")
-					:Create(
-						LoadingBarFill,
-						TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-						{ BackgroundColor3 = Color3.fromRGB(170, 255, 200) }
-					)
-					:Play()
-	
-				task.delay(0.3, function()
-					game:GetService("TweenService"):Create(blurEffect, TweenInfo.new(0.3), { Size = 0 }):Play()
-	
-					local closeTween = game:GetService("TweenService"):Create(
-						Frame,
-						TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In),
-						{ Size = UDim2.new(0, 0, 0, 0) }
-					)
-					closeTween:Play()
-	
-					closeTween.Completed:Connect(function()
-						blurEffect:Destroy()
-						scringui:Destroy()
-	
-						-- Load the main UI here
-						loadMainUI()
-					end)
-				end)
-			end
+			-- Load the script from the API
+			api.load_script()
 		end)
 	end
 
