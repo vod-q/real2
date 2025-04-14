@@ -567,14 +567,15 @@ local function makeUI()
 			sigmakey = key
 			ApiStatusCode = "KEY_VALID"
 	
-			-- Proceed to load the main UI
-			BESTLOADINGANIMATIONNOTFAKE()
+			-- Directly proceed to load the main script
+			task.delay(0.5, function()
+				BESTLOADINGANIMATIONNOTFAKE() -- Simulate loading animation
+			end)
 		else
 			StatusLabel.Text = "Invalid Key. Try Again."
 			StatusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
 		end
 	end)
-	
 	local dragging
 	local dragInput
 	local dragStart
