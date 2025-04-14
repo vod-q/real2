@@ -528,7 +528,7 @@ local function makeUI()
 						scringui:Destroy()
 	
 						-- Load the main UI here
-						api.load_script()
+						MakeUI()
 					end)
 				end)
 			end
@@ -609,5 +609,6 @@ end
 
 local function loadMainUI()
     -- Add your main UI initialization code here
+	api.load_script()
     print("Main UI loaded!") -- Replace this with actual UI code
 end
