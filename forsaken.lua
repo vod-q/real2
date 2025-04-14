@@ -558,24 +558,23 @@ local function makeUI()
 
 	KeyCheckingButtonSex = MakeSigmaButton("Check Key", Color3.fromRGB(80, 180, 100), Color3.fromRGB(100, 200, 120))
 	KeyCheckingButtonSex.Activated:Connect(function()
-		local key = TextBox.Text:gsub("%s+", "")
-		StatusLabel.Text = "Checking key..."
-
-		local status = CheckiKey(key)
-
-		if status.code == "KEY_VALID" then
-			StatusLabel.Text = STATUS_MESSAGES.KEY_VALID
+		local key = TextBox.Text:gsub("%s+", "") -- Get the entered key
+		local presetKey = "bypasskey" -- Define your preset key
+	
+		if key == presetKey then
+			StatusLabel.Text = "Key Validated!"
 			StatusLabel.TextColor3 = Color3.fromRGB(97, 255, 140)
 			sigmakey = key
-			ApiStatusCode = status.code
-
+			ApiStatusCode = "KEY_VALID"
+	
+			-- Proceed to load the main UI
 			BESTLOADINGANIMATIONNOTFAKE()
 		else
-			StatusLabel.Text = STATUS_MESSAGES[status.code] or status.message
+			StatusLabel.Text = "Invalid Key. Try Again."
 			StatusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
 		end
 	end)
-
+	
 	local dragging
 	local dragInput
 	local dragStart
