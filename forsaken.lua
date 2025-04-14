@@ -474,61 +474,37 @@ local function makeUI()
 		TextBox.Visible = false
 		StatusLabel.Visible = false
 		ButtonsFrame.Visible = false
-
+	
 		LoadingBarContainer.Visible = true
 		LoadingText.Visible = true
-
+	
 		LoadingText.Text = "Validating key..."
-
+	
 		local startTime = tick()
 		local duration = 1.5
 		local connection
-
+	
 		connection = game:GetService("RunService").RenderStepped:Connect(function()
 			local elapsed = tick() - startTime
 			local progress = math.min(elapsed / duration, 1)
-
+	
 			local easedProgress = 1 - (1 - progress) ^ 3
-
+	
 			LoadingBarFill.Size = UDim2.new(easedProgress, 0, 1, 0)
-
+	
 			if progress < 0.3 then
 				LoadingText.Text = "Checking key..."
 			elseif progress < 0.6 then
 				LoadingText.Text = "Authenticating..."
 			elseif progress < 0.9 then
-				LoadingText.Text = "This totaly does something..."
+				LoadingText.Text = "Almost there..."
 			else
 				LoadingText.Text = "Authenticated."
 			end
-
-			if math.random() < 0.1 and progress > 0.5 then
-				local particle = Instance.new("Frame")
-				particle.BackgroundColor3 = Color3.fromRGB(97, 255, 140)
-				particle.BackgroundTransparency = 0.7
-				particle.Size = UDim2.new(0, math.random(2, 4), 0, math.random(2, 4))
-				particle.Position =
-					UDim2.new(easedProgress * math.random(80, 100) / 100, 0, math.random(-10, 10) / 10, 0)
-				particle.ZIndex = 14
-				particle.Parent = LoadingBarContainer
-
-				local particleCorner = Instance.new("UICorner")
-				particleCorner.CornerRadius = UDim.new(1, 0)
-				particleCorner.Parent = particle
-
-				game:GetService("TweenService")
-					:Create(particle, TweenInfo.new(0.5), {
-						BackgroundTransparency = 1,
-						Position = UDim2.new(particle.Position.X.Scale, 0, particle.Position.Y.Scale - 0.3, 0),
-					})
-					:Play()
-
-				game:GetService("Debris"):AddItem(particle, 0.5)
-			end
-
+	
 			if progress >= 1 then
 				connection:Disconnect()
-
+	
 				game:GetService("TweenService")
 					:Create(
 						LoadingBarFill,
@@ -536,20 +512,23 @@ local function makeUI()
 						{ BackgroundColor3 = Color3.fromRGB(170, 255, 200) }
 					)
 					:Play()
-
+	
 				task.delay(0.3, function()
 					game:GetService("TweenService"):Create(blurEffect, TweenInfo.new(0.3), { Size = 0 }):Play()
-
+	
 					local closeTween = game:GetService("TweenService"):Create(
 						Frame,
 						TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In),
 						{ Size = UDim2.new(0, 0, 0, 0) }
 					)
 					closeTween:Play()
-
+	
 					closeTween.Completed:Connect(function()
 						blurEffect:Destroy()
 						scringui:Destroy()
+	
+						-- Load the main UI here
+						loadMainUI()
 					end)
 				end)
 			end
@@ -627,4 +606,8 @@ local function makeUI()
 	return scringui
 end
 
-makeUI()
+
+local function loadMainUI()
+    -- Add your main UI initialization code here
+    print("Main UI loaded!") -- Replace this with actual UI code
+end
